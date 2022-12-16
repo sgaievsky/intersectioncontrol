@@ -1,47 +1,44 @@
 package com.example.intersectioncontrol.entity;
 
-import com.example.intersectioncontrol.enumeration.SLColor;
-import com.example.intersectioncontrol.enumeration.Status;
+import com.example.intersectioncontrol.enumeration.StreetLightColor;
+import com.example.intersectioncontrol.enumeration.StreetLightStatus;
 import lombok.Getter;
-import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Getter
-@Setter
-@Entity
 public class StreetLight implements Serializable {
 
-    @Id
     private Long id;
-
-    @OneToOne
-    @JoinColumn(name = "street_lights_pair_id")
-    private StreetLightsPair streetLightsPair;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "current_color")
-    private SLColor currentColor;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "broken_lights", nullable = false)
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<SLColor> brokenLights = new ArrayList<>();
-    private Status status;
+    private StreetLightColor currentColor;
+    private List<StreetLightColor> brokenLights;
+    private StreetLightStatus status;
 
     public StreetLight() {
-        currentColor = SLColor.RED;
-        status = Status.ACTIVE;
+        id = new Random().nextLong();
+        currentColor = StreetLightColor.RED;
+        brokenLights = new ArrayList<>();
+        status = StreetLightStatus.ACTIVE;
     }
+
+    public StreetLightColor switchLights() {
+        if (currentColor == StreetLightColor.RED) {
+            currentColor = StreetLightColor.GREEN;
+        } else {
+            currentColor = StreetLightColor.RED;
+        }
+        return currentColor;
+    }
+
+    public void switchLights(StreetLightColor streetLightColor) {
+        if (streetLightColor == StreetLightColor.RED) {
+            currentColor = StreetLightColor.GREEN;
+        } else {
+            currentColor = StreetLightColor.RED;
+        }
+    }
+
 }
